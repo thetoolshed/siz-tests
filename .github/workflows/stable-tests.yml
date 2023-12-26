@@ -1,0 +1,25 @@
+name: Unit Tests, Stable Toolchain
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  unit-tests-stable:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: Stable Unit Tests
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Install the latest stable Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run unit tests
+        run: cargo install siz && siz -c .
